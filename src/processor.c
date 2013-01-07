@@ -76,32 +76,36 @@ void cpucycle() {
       break;
 
     case 0x5: //8XY5 VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there isn't.
-      //Do it
+      V[0xF] = (V[inst.ntype.nib0] > V[inst.ntype.nib1]) ? 1 : 0;
+      V[inst.ntype.nib0] = V[inst.ntype.nib0] - V[inst.ntype.nib1];
       break;
       
     case 0x6: //8XY6 Shifts VX right by one. VF is set to the value of the least significant bit of VX before the shift.
-      //Do it
+      V[0xF] = V[inst.ntype.nib0] & 1;
+      V[inst.ntype.nib0] >>= 1;
       break;
 
     case 0x7: //8XY7 Sets VX to VY minus VX. VF is set to 0 when there's a borrow, and 1 when there isn't.
-      //Do it
+      V[0xF] = (V[inst.ntype.nib1] > V[inst.ntype.nib0]) ? 1 : 0;
+      V[inst.ntype.nib0] = V[inst.ntype.nib1] - V[inst.ntype.nib0];
       break;
 
     case 0xE: //8XYE Shifts VX left by one. VF is set to the value of the most significant bit of VX before the shift.
-      //Do it
+      V[0xF] = (V[inst.ntype.nib0] & 0x80) >> 7;
+      V[inst.ntype.nib0] <<= 1;
       break;
     }
 
   case 0x9: //9XY0 Skips the next instruction if VX doesn't equal VY.
-    //Do it
+    if(V[inst.ntype.nib0] != V[inst.ntype.nib1]) pc += 2;
     break;
 
   case 0xA: //ANNN Sets I to the address NNN.
-    //Do it
+    I = inst.jtype.address;
     break;
 
   case 0xB: //BNNN Jumps to the address NNN plus V0.
-    //Do it
+    pc = inst.jtype.address + V[0];
     break;
 
   case 0xC: //CNNN Sets VX to a random number and NN.
@@ -128,7 +132,7 @@ void cpucycle() {
     switch(inst.itype.imm) {
       
     case 0x07: //FX07 Sets VX to the value of the delay timer.
-      //Do it
+      V[inst.ntype.nib0] = delaytimer;
       break;
 
     case 0x0A: //FX0A A key press is awaited, and then stored in VX.
@@ -144,7 +148,7 @@ void cpucycle() {
       break;
 
     case 0x1E: //FX1E Adds VX to I
-      //Do it
+      I += V[inst.ntype.nib0];
       break;
 
     case 0x29: //FX29 Sets I to the location of the sprite for the character in VX. Characters 0-F (in hexadecimal) are represented by a 4x5 font.

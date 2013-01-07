@@ -76,5 +76,6 @@ void initialize(int size) {
 inst_t fetch() {
   inst_t ret;
   ret.bits = mem[pc] << 8 | mem[pc + 1];
+  pc += 2;
   return ret;
 }
