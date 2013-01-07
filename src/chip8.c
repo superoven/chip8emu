@@ -1,8 +1,18 @@
+#include <stdio.h>
 #include "SDL/SDL.h"
 #include "chip8.h"
 
-int main() {
-  SDL_Init(SDL_INIT_EVERYTHING);
-  SDL_Quit();
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf("Usage: ./chipemu [rom]\n");
+    return 0;
+  }
+  
+  int filesize = loadrom(argv[1], &romdata);
+
+  initialize(filesize);
+
+  //SDL_Init(SDL_INIT_EVERYTHING);
+  //SDL_Quit();
   return 0;
 }

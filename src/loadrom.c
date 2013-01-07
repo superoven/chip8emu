@@ -53,9 +53,11 @@ void error(const char* message) {
 
 void initialize(int size) {
   pc = 0x200;
-  inst = 0;
+  inst.bits = 0;
   I = 0;
   sp = 0;
+  soundtimer = 0;
+  delaytimer = 0;
   
   //Clear display
   //Clear stack
@@ -69,5 +71,10 @@ void initialize(int size) {
   for(int i = 0; i < size; i++) mem[i + 0x200] = romdata[i];
   
   free(romdata);
+}
 
+inst_t fetch() {
+  inst_t ret;
+  ret.bits = mem[pc] << 8 | mem[pc + 1];
+  return ret;
 }
