@@ -1,5 +1,8 @@
 #include "chip8.h"
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+
 
 void cpucycle() {
   inst = fetch();
@@ -72,7 +75,8 @@ void cpucycle() {
       break;
     
     case 0x4: //8XY4 Adds VY to VX. VF is set to 1 when there's a carry, and to 0 when there isn't.
-      //Do it
+      V[0xF] = (V[inst.ntype.nib1] > (0xFF - V[inst.ntype.nib0])) ? 1 : 0;
+      V[inst.ntype.nib0] += V[inst.ntype.nib1];
       break;
 
     case 0x5: //8XY5 VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there isn't.
@@ -109,7 +113,7 @@ void cpucycle() {
     break;
 
   case 0xC: //CNNN Sets VX to a random number and NN.
-    //Do it
+    V[inst.ntype.nib0] = (rand() % 255) & inst.itype.imm;
     break;
 
   case 0xD: //DXYN Draws a sprite at coordinate (VX, VY) ...
