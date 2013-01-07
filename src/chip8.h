@@ -1,6 +1,11 @@
 #ifndef __chip8_h_
 #define __chip8_h_
 
+#define WIDTH 64
+#define HEIGHT 32
+
+#define MULT 10
+
 //The rom itself
 char* romdata;
 

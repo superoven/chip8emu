@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "chip8.h"
 
@@ -70,6 +71,9 @@ void initialize(int size) {
 
   //Put rom data into memory
   for(int i = 0; i < size; i++) mem[i + 0x200] = romdata[i];
+
+
+  srand(time(NULL));
   
   free(romdata);
 }

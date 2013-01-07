@@ -3,9 +3,10 @@
 #include <time.h>
 #include <stdlib.h>
 
-
 void cpucycle() {
+
   inst = fetch();
+
   switch(inst.ntype.opcode) {
 
   case 0x0:
