@@ -13,7 +13,8 @@ void cpucycle() {
       break;
 
     case 0xE: //00EE: Return from subroutine
-      //Do it
+      --sp;
+      pc = stack[sp];
       break;
 
     default:
@@ -22,50 +23,52 @@ void cpucycle() {
     }
 
   case 0x1: //1NNN Jump to address NNN
-    //Do it
+    pc = inst.jtype.address;
     break;
 
   case 0x2: //2NNN Call subroutine at NNN
-    //Do it
+    stack[sp] = pc - 2;
+    ++sp;
+    pc = inst.jtype.address;
     break;
 
   case 0x3: //3XNN Skips the next instruction if VX equals NN.
-    //Do it
+    if (V[inst.ntype.nib0] == inst.itype.imm) pc += 2;
     break;
 
   case 0x4: //4XNN Skips the next instruction if VX doesn't equal NN.
-    //Do it
+    if (V[inst.ntype.nib0] != inst.itype.imm) pc += 2;
     break;
 
-  case 0x5: //5XNN Skips the next instruction if VX equals VY.
-    //Do it
+  case 0x5: //5XY0 Skips the next instruction if VX equals VY.
+    if (V[inst.ntype.nib0] == V[inst.ntype.nib1]) pc += 2;
     break;
 
   case 0x6: //6XNN Sets VX to NN.
-    //Do it
+    V[inst.ntype.nib0] = inst.itype.imm;
     break;
 
   case 0x7: //7XNN Adds NN to VX.
-    //Do it
+    V[inst.ntype.nib0] += inst.itype.imm;
     break;
 
   case 0x8: //Arithmetic things
     switch(inst.ntype.nib2) {
       
     case 0x0: //8XY0 Sets VX to the value of VY.
-      //Do it
+      V[inst.ntype.nib0] = V[inst.ntype.nib1];
       break;
 
     case 0x1: //8XY1 Sets VX to VX or VY.
-      //Do it
+      V[inst.ntype.nib0] = V[inst.ntype.nib0] | V[inst.ntype.nib1];
       break;
       
     case 0x2: //8XY2 Sets VX to VX and VY.
-      //Do it
+      V[inst.ntype.nib0] = V[inst.ntype.nib0] & V[inst.ntype.nib1];
       break;
 
     case 0x3: //8XY3 Sets VX to VX xor VY.
-      //Do it
+      V[inst.ntype.nib0] = V[inst.ntype.nib0] ^ V[inst.ntype.nib1];
       break;
     
     case 0x4: //8XY4 Adds VY to VX. VF is set to 1 when there's a carry, and to 0 when there isn't.
@@ -109,7 +112,57 @@ void cpucycle() {
     //Do it
     break;
 
-    
+  case 0xE:
+    switch(inst.itype.imm) {
+      
+    case 0x93: //EX93 Skips the next instruction if the key stored in VX is pressed.
+      //Do it
+      break;
+
+    case 0xA1: //EXA1 Skips the next instruction if the key stored in VX isn't pressed.
+      //Do it
+      break;
+    }
+
+  case 0xF:
+    switch(inst.itype.imm) {
+      
+    case 0x07: //FX07 Sets VX to the value of the delay timer.
+      //Do it
+      break;
+
+    case 0x0A: //FX0A A key press is awaited, and then stored in VX.
+      //Do it
+      break;
+
+    case 0x15: //FX15 Sets the delay timer to VX.
+      delaytimer = V[inst.ntype.nib0];
+      break;
+
+    case 0x18: //FX18 Sets the sound timer to VX.
+      soundtimer = V[inst.ntype.nib0];
+      break;
+
+    case 0x1E: //FX1E Adds VX to I
+      //Do it
+      break;
+
+    case 0x29: //FX29 Sets I to the location of the sprite for the character in VX. Characters 0-F (in hexadecimal) are represented by a 4x5 font.
+      //Do it
+      break;
+
+    case 0x33: //FX33 Stores the Binary-coded decimal representation of VX ...
+      //Do it
+      break;
+
+    case 0x55: //FX55 Stores V0 to VX in memory starting at address I.
+      //Do it
+      break;
+
+    case 0x65: //FX65 Fills V0 to VX with values from memory starting at address I.
+      //Do it
+      break;
+    }
 
   default:
     printf("Unknown opcode: 0x%04X\n", inst.bits);
