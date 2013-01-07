@@ -58,6 +58,7 @@ void initialize(int size) {
   sp = 0;
   soundtimer = 0;
   delaytimer = 0;
+  drawflag = 0;
   
   //Clear display
   //Clear stack

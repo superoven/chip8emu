@@ -19,10 +19,6 @@ void cpucycle() {
       --sp;
       pc = stack[sp];
       break;
-
-    default:
-      printf("Unknown opcode: 0x%04X\n", inst.bits);
-      break;
     }
 
   case 0x1: //1NNN Jump to address NNN
@@ -117,7 +113,24 @@ void cpucycle() {
     break;
 
   case 0xD: //DXYN Draws a sprite at coordinate (VX, VY) ...
-    //Do it
+    {
+      unsigned short x = V[inst.ntype.nib0];
+      unsigned short y = V[inst.ntype.nib1];
+      unsigned short height = inst.ntype.nib2;
+      unsigned short pixel;
+
+      V[0xF] = 0;
+      for (int yline = 0; yline < height; yline++) {
+	pixel = mem[I + yline];
+	for (int xline = 0; xline < 8; xline++) {
+	  if ((pixel & (0x80 >> xline)) != 0) {
+	    if (gfx[x + xline + ((y + yline) * 64)] == 1) V[0xF] = 1;
+	    gfx[x + xline + ((y + yline) * 64)] ^= 1;
+	  }
+	}
+      }
+      drawflag = 1;
+    }
     break;
 
   case 0xE:
@@ -160,15 +173,17 @@ void cpucycle() {
       break;
 
     case 0x33: //FX33 Stores the Binary-coded decimal representation of VX ...
-      //Do it
+      mem[I] = V[inst.ntype.nib0] / 100;
+      mem[I+1] = (V[inst.ntype.nib0] / 10) % 10;
+      mem[I+2] = (V[inst.ntype.nib0] / 100) % 10;
       break;
 
     case 0x55: //FX55 Stores V0 to VX in memory starting at address I.
-      //Do it
+      for(int i = 0; i < inst.ntype.nib0; i++) mem[I + i] = V[i];
       break;
 
     case 0x65: //FX65 Fills V0 to VX with values from memory starting at address I.
-      //Do it
+      for(int i = 0; i < inst.ntype.nib0; i++) V[i] = mem[I + i];      
       break;
     }
 
