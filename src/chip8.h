@@ -18,10 +18,18 @@ typedef struct {
   unsigned int opcode : 4;
 } jtype_inst_t;
 
+//Subset of instruction type to parse intermediates
+typedef struct {
+  unsigned int imm : 8;
+  unsigned int reg : 4;
+  unsigned int opcode : 4;
+} itype_inst_t;
+
 //Instruction Type to allow for multiple interpretations
 typedef union {
   ntype_inst_t ntype;
   jtype_inst_t jtype;
+  itype_inst_t itype;
   unsigned short bits;
 } inst_t;
 
