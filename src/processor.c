@@ -12,12 +12,14 @@ void cpucycle() {
     switch(inst.ntype.nib2) {
 
     case 0x0: //00E0: Clear Screen
-      //Do it
+      for(int i = 0; i < 2048; i++) gfx[i] = 0;
+      drawflag = 1;
       break;
 
     case 0xE: //00EE: Return from subroutine
       --sp;
       pc = stack[sp];
+      pc += 2;
       break;
     }
 
@@ -91,7 +93,7 @@ void cpucycle() {
       break;
 
     case 0xE: //8XYE Shifts VX left by one. VF is set to the value of the most significant bit of VX before the shift.
-      V[0xF] = (V[inst.ntype.nib0] & 0x80) >> 7;
+      V[0xF] = V[inst.ntype.nib0] >> 7;
       V[inst.ntype.nib0] <<= 1;
       break;
     }
@@ -137,11 +139,11 @@ void cpucycle() {
     switch(inst.itype.imm) {
       
     case 0x93: //EX93 Skips the next instruction if the key stored in VX is pressed.
-      //Do it
+      if (key[V[inst.ntype.nib0]] != 0) pc += 2;
       break;
 
     case 0xA1: //EXA1 Skips the next instruction if the key stored in VX isn't pressed.
-      //Do it
+      if (key[V[inst.ntype.nib0]] == 0) pc += 2;      
       break;
     }
 
@@ -153,7 +155,19 @@ void cpucycle() {
       break;
 
     case 0x0A: //FX0A A key press is awaited, and then stored in VX.
-      //Do it
+      {
+	unsigned char keypress = 0x0;
+	for(int i = 0; i < 16; i++) {
+	  if(key[i]) {
+	    V[inst.ntype.nib0] = i;
+	    keypress = 0x1;
+	  }
+	}
+	if(!keypress) {
+	  pc -= 2;
+	  return;
+	}
+      }
       break;
 
     case 0x15: //FX15 Sets the delay timer to VX.
@@ -165,11 +179,12 @@ void cpucycle() {
       break;
 
     case 0x1E: //FX1E Adds VX to I
+      V[0xF] = (I + V[inst.ntype.nib0] > 0xFFF) ? 1 : 0;
       I += V[inst.ntype.nib0];
       break;
 
     case 0x29: //FX29 Sets I to the location of the sprite for the character in VX. Characters 0-F (in hexadecimal) are represented by a 4x5 font.
-      //Do it
+      I = V[inst.ntype.nib0] * 5;
       break;
 
     case 0x33: //FX33 Stores the Binary-coded decimal representation of VX ...
@@ -180,10 +195,12 @@ void cpucycle() {
 
     case 0x55: //FX55 Stores V0 to VX in memory starting at address I.
       for(int i = 0; i < inst.ntype.nib0; i++) mem[I + i] = V[i];
+      I += inst.ntype.nib0 + 1;
       break;
 
     case 0x65: //FX65 Fills V0 to VX with values from memory starting at address I.
-      for(int i = 0; i < inst.ntype.nib0; i++) V[i] = mem[I + i];      
+      for(int i = 0; i < inst.ntype.nib0; i++) V[i] = mem[I + i];
+      I += inst.ntype.nib0 + 1;
       break;
     }
 
