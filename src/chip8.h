@@ -6,8 +6,19 @@
 
 #define MULT 10
 
+int display_width;
+int display_height;
+
 //The rom itself
 char* romdata;
+
+//The processor structure
+typedef struct
+{
+  unsigned char V[16];
+  unsigned short I;
+  unsigned short pc;
+} processor_t;
 
 //Subset of instruction type to parse nibbles
 typedef struct {
@@ -44,14 +55,8 @@ inst_t inst;
 //RAM 4k total
 unsigned char mem[4096];
 
-//Registers
-unsigned char V[16];
-
 //Index Register
 unsigned short I;
-
-//Program Counter
-unsigned short pc;
 
 //Graphics array (Resolution: 64 x 32)
 unsigned gfx[64*32];
@@ -80,12 +85,22 @@ int loadrom(const char* romname, char** result);
 void error(const char* message);
 
 //Initialize all data in the processor and screen
-void initialize(int size);
+void initialize(processor_t *p, int size);
 
 //Fetch the instruction at the pc
 inst_t fetch();
 
 //Run a cpu cycle
 void cpucycle();
+
+//Print registers for debugging
+void printreg(processor_t *p);
+
+//Glut draw function
+void display();
+void keyboardDown(unsigned char val, int x, int y);
+void keyboardUp(unsigned char val, int x, int y);
+
+extern processor_t p;
 
 #endif

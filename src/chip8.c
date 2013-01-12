@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include "SDL/SDL.h"
+#include <GL/glut.h>
 #include "chip8.h"
 
-SDL_Surface *screen;
-SDL_Event event;
+processor_t p;
 
 int main(int argc, char *argv[]) {
 
@@ -13,13 +12,25 @@ int main(int argc, char *argv[]) {
   }
 
   int filesize = loadrom(argv[1], &romdata);
+  display_width = WIDTH*MULT;
+  display_height = HEIGHT*MULT;
 
-  initialize(filesize);
+  initialize(&p, filesize);
 
-  SDL_Init(SDL_INIT_VIDEO);
-  screen = SDL_SetVideoMode(WIDTH*MULT, HEIGHT*MULT, 16, SDL_HWSURFACE);
-  SDL_WM_SetCaption("Simple Window", "Simple Window");
-  char c=getchar();
-  SDL_Quit();
+  for(int i = 0; i < 10; i++) cpucycle();
+
+  /*glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA );
+  glutInitWindowPosition(320,160);
+  glutInitWindowSize(display_width, display_height);
+  glutCreateWindow("CHIP-8 Emulator");
+
+  glutDisplayFunc(display);
+  glutIdleFunc(display);
+  glutKeyboardFunc(keyboardDown);
+  glutKeyboardUpFunc(keyboardUp); 
+
+  glutMainLoop();*/
+
   return 0;
 }
