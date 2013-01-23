@@ -4,6 +4,12 @@
 
 processor_t p;
 
+void step() {
+  cpucycle();
+  getchar();
+  step();
+}
+
 int main(int argc, char *argv[]) {
 
   if (argc < 2) {
@@ -17,7 +23,9 @@ int main(int argc, char *argv[]) {
 
   initialize(&p, filesize);
 
-  for(int i = 0; i < 10; i++) cpucycle();
+  step();
+  
+  //for(int i = 0; i < 10; i++) cpucycle();
 
   /*glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA );

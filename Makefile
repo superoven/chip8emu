@@ -1,4 +1,4 @@
-SOURCEFILES := chip8.c loadrom.c processor.c
+SOURCEFILES := chip8.c loadrom.c processor.c disassembler.c
 HEADERFILES := chip8.h
 SOURCES := $(addprefix src/, $(SOURCEFILES))
 HEADERS := $(addprefix src/, $(HEADERFILES))

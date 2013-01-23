@@ -28,10 +28,12 @@ unsigned char fontset[80] =
   };
 
 void printreg(processor_t *p) {
-  for(int i = 0; i < 16; i++) {
-    printf("V[%-2d] = 0x%04X\n", i, p->V[i]);
+  for(int i = 0; i < 14; i += 2) {
+    printf("V[%-2d] = 0x%02X    V[%-2d] = 0x%02X\n", i, p->V[i], i+1, p->V[i+1]);
   }
-  printf("I = 0x%04X\n", I);
+  printf("V[14] = 0x%02X\n", p->V[14]);
+  printf("V[F ] = 0x%02X\n", p->V[15]);
+  printf("I %-3s = 0x%04X\n", "", p->I);
 }
 
 int loadrom(const char* romname, char** result) {

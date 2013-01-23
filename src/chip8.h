@@ -93,6 +93,9 @@ inst_t fetch();
 //Run a cpu cycle
 void cpucycle();
 
+//Disassemble instruction
+void disassemble(inst_t a);
+
 //Print registers for debugging
 void printreg(processor_t *p);
 
