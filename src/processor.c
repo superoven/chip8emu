@@ -9,9 +9,11 @@ void cpucycle() {
 
   inst = fetch(&p);
 
-  printf("PC: 0x%04X  INST: 0x%04X\n", p.pc-2, inst.bits);
+  printf("\nPC: 0x%04X  INST: 0x%04X\n", p.pc-2, inst.bits);
   disassemble(inst);
   printreg(&p);
+  printf("\nDelayTimer: %d\nSoundTimer: %d\n", p.delaytimer, p.soundtimer);
+  printf("Drawflag: %s\n", (drawflag ? "True" : "False"));
 
   switch(inst.ntype.opcode) {
 
@@ -19,8 +21,8 @@ void cpucycle() {
     switch(inst.ntype.nib2) {
 
     case 0x0: //00E0: Clear Screen
-      //for(int i = 0; i < 2048; i++) gfx[i] = 0;
-      //drawflag = 1;
+      for(int i = 0; i < 2048; i++) gfx[i] = 0;
+      drawflag = 1;
       return;
 
     case 0xE: //00EE: Return from subroutine
@@ -158,7 +160,7 @@ void cpucycle() {
     switch(inst.itype.imm) {
       
     case 0x07: //FX07 Sets VX to the value of the delay timer.
-      p.V[inst.ntype.nib0] = delaytimer;
+      p.V[inst.ntype.nib0] = p.delaytimer;
       return;
 
     case 0x0A: //FX0A A key press is awaited, and then stored in VX.
@@ -178,11 +180,11 @@ void cpucycle() {
       return;
 
     case 0x15: //FX15 Sets the delay timer to VX.
-      delaytimer = p.V[inst.ntype.nib0];
+      p.delaytimer = p.V[inst.ntype.nib0];
       return;
 
     case 0x18: //FX18 Sets the sound timer to VX.
-      soundtimer = p.V[inst.ntype.nib0];
+      p.soundtimer = p.V[inst.ntype.nib0];
       return;
 
     case 0x1E: //FX1E Adds VX to I
@@ -216,10 +218,5 @@ void cpucycle() {
     return;
   }
 
-  if (delaytimer) --delaytimer;
- 
-  if(soundtimer){
-    if(soundtimer == 1) printf("BEEP!\n");
-    --soundtimer;
-  }  
+
 }

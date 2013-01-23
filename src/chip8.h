@@ -18,6 +18,8 @@ typedef struct
   unsigned char V[16];
   unsigned short I;
   unsigned short pc;
+  unsigned char soundtimer;
+  unsigned char delaytimer;
 } processor_t;
 
 //Subset of instruction type to parse nibbles
@@ -60,10 +62,6 @@ unsigned short I;
 
 //Graphics array (Resolution: 64 x 32)
 unsigned gfx[64*32];
-
-//Timers for Syncing
-unsigned char soundtimer;
-unsigned char delaytimer;
 
 //Stack for function backtracking
 unsigned short stack[16];

@@ -25,10 +25,8 @@ int main(int argc, char *argv[]) {
 
   step();
   
-  //for(int i = 0; i < 10; i++) cpucycle();
-
   /*glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA );
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA );
   glutInitWindowPosition(320,160);
   glutInitWindowSize(display_width, display_height);
   glutCreateWindow("CHIP-8 Emulator");

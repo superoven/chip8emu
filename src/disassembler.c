@@ -108,7 +108,7 @@ void disassemble(inst_t a) {
     return;
 
   case 0xD: //DXYN Draws a sprite at coordinate (VX, VY) ...
-    printf("%s\n", "DRAW");
+    printf("%s V%d V%d\n", "DRAW", inst.ntype.nib0, inst.ntype.nib1);
     return;
 
   case 0xE:
@@ -127,7 +127,7 @@ void disassemble(inst_t a) {
     switch(inst.itype.imm) {
       
     case 0x07: //FX07 Sets VX to the value of the delay timer.
-      printf("%s V%d\n", "SETTODELAY", inst.ntype.nib0);
+      printf("%s V%d\n", "SETVXTODELAY", inst.ntype.nib0);
       return;
 
     case 0x0A: //FX0A A key press is awaited, and then stored in VX.

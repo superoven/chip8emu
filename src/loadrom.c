@@ -6,6 +6,7 @@
 #include "chip8.h"
 
 char* romdata;
+processor_t p;
 
 unsigned char fontset[80] =
   { 
@@ -32,7 +33,7 @@ void printreg(processor_t *p) {
     printf("V[%-2d] = 0x%02X    V[%-2d] = 0x%02X\n", i, p->V[i], i+1, p->V[i+1]);
   }
   printf("V[14] = 0x%02X\n", p->V[14]);
-  printf("V[F ] = 0x%02X\n", p->V[15]);
+  printf("\nV[F ] = 0x%02X\n", p->V[15]);
   printf("I %-3s = 0x%04X\n", "", p->I);
 }
 
@@ -67,8 +68,8 @@ void initialize(processor_t *p, int size) {
   inst.bits = 0;
   I = 0;
   sp = 0;
-  soundtimer = 0;
-  delaytimer = 0;
+  p->soundtimer = 0;
+  p->delaytimer = 0;
   drawflag = 0;
   
   //Clear display
@@ -170,7 +171,14 @@ void display()
 {
   cpucycle();
 
-  /*if(drawflag)
+  if (p.delaytimer) --p.delaytimer;
+ 
+  if(p.soundtimer){
+    if(p.soundtimer == 1) printf("BEEP!\n");
+    --p.soundtimer;
+  }
+
+  if(drawflag)
     {
       // Clear framebuffer
       glClear(GL_COLOR_BUFFER_BIT);
@@ -182,5 +190,5 @@ void display()
 
       // Processed frame
       drawflag = 0;
-      }*/
+    }
 }
