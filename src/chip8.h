@@ -20,6 +20,7 @@ typedef struct
   unsigned short pc;
   unsigned char soundtimer;
   unsigned char delaytimer;
+  unsigned char drawflag;
 } processor_t;
 
 //Subset of instruction type to parse nibbles
@@ -72,9 +73,6 @@ unsigned char key[16];
 
 //Fontset for the processor
 unsigned char fontset[80];
-
-//Signal to the emulator that it should draw graphics
-unsigned char drawflag;
 
 //Load a given "romname" into the pointer starting at "result"
 int loadrom(const char* romname, char** result);

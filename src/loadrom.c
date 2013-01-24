@@ -70,7 +70,7 @@ void initialize(processor_t *p, int size) {
   sp = 0;
   p->soundtimer = 0;
   p->delaytimer = 0;
-  drawflag = 0;
+  p->drawflag = 0;
   
   //Clear display
   //Clear stack
@@ -91,7 +91,6 @@ void initialize(processor_t *p, int size) {
 inst_t fetch(processor_t *p) {
   inst_t ret;
   ret.bits = mem[p->pc] << 8 | mem[p->pc + 1];
-  p->pc += 2;
   return ret;
 }
 
@@ -171,14 +170,7 @@ void display()
 {
   cpucycle();
 
-  if (p.delaytimer) --p.delaytimer;
- 
-  if(p.soundtimer){
-    if(p.soundtimer == 1) printf("BEEP!\n");
-    --p.soundtimer;
-  }
-
-  if(drawflag)
+  if(p.drawflag)
     {
       // Clear framebuffer
       glClear(GL_COLOR_BUFFER_BIT);
@@ -189,6 +181,6 @@ void display()
       glutSwapBuffers();    
 
       // Processed frame
-      drawflag = 0;
+      p.drawflag = 0;
     }
 }
