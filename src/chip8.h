@@ -5,6 +5,8 @@
 #define HEIGHT 32
 
 #define RAMLENGTH 4096
+#define DEBUGMODE 1
+#define TESTOUT 1
 
 #define MULT 10
 

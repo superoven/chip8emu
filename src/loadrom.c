@@ -197,6 +197,7 @@ void display(processor_t* p)
 }
 
 void drawscreen() {
+  if (DEBUGMODE) return;
   char buffer[(32*64) + 32*2];
   for(int j = 0; j < HEIGHT; j++) {
     for(int i = 0; i < WIDTH+1; i++) {

@@ -23,9 +23,8 @@ int main(int argc, char *argv[]) {
 
   initialize(&p, filesize);
 
-  //step(&p);
-
-  while (1) display(&p);
+  if (DEBUGMODE && TESTOUT) while(1) display(&p);
+  else if (DEBUGMODE) step(&p);
   
   /*glutInit(&argc, argv);
 

@@ -27,7 +27,7 @@ void cpucycle(processor_t* p) {
 
   inst = fetch(p);
 
-  //debugout(p, inst);
+  if (DEBUGMODE && !TESTOUT) debugout(p, inst);
 
   p->drawflag = 0;
 
@@ -259,6 +259,14 @@ void cpucycle(processor_t* p) {
       for(int i = 0; i < inst.ntype.nib0; i++) p->V[i] = mem[p->I + i];
       p->I += inst.ntype.nib0 + 1;
       postvisit(p,0);
+      return;
+
+    case 0x10: //DEBUGGING ONLY Print the first 5 registers
+      if (!TESTOUT) return;
+      printf("%02X", p->V[0]);
+      for(int i = 1; i < 5; i++) printf(" %02X", p->V[i]);
+      printf("\n");
+      exit(0);
       return;
       }
 

@@ -14,7 +14,7 @@ void disassemble(processor_t* p, inst_t a) {
 
     case 0x0: //00E0: Clear Screen
       printf("%s\n", "CLEAR");
-      break;
+      return;
 
     case 0xE: //00EE: Return from subroutine
       printf("%s\n", "RETURN");
@@ -162,7 +162,7 @@ void disassemble(processor_t* p, inst_t a) {
       }
 
   default:
-    printf("Unknown opcode: 0x%04X at 0x%04X\n", inst.bits, p->pc-2);
+    //printf("Unknown opcode: 0x%04X at 0x%04X\n", inst.bits, p->pc-2);
     return;
   }
 }
