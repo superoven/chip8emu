@@ -3,9 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-processor_t p;
-
-void disassemble(inst_t a) {
+void disassemble(processor_t* p, inst_t a) {
 
   inst.bits = a.bits;
 
@@ -164,7 +162,7 @@ void disassemble(inst_t a) {
       }
 
   default:
-    printf("Unknown opcode: 0x%04X at 0x%04X\n", inst.bits, p.pc-2);
+    printf("Unknown opcode: 0x%04X at 0x%04X\n", inst.bits, p->pc-2);
     return;
   }
 }

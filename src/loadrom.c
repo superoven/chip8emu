@@ -7,8 +7,7 @@
 #include "chip8.h"
 
 char* romdata;
-//processor_t p;
-unsigned gfx[64*32];
+unsigned gfx[WIDTH * HEIGHT];
 
 unsigned char fontset[80] =
   { 
@@ -66,20 +65,26 @@ void error(const char* message) {
 }
 
 void initialize(processor_t *p, int size) {
+
   p->pc = 0x200;
-  inst.bits = 0;
-  I = 0;
-  sp = 0;
+  p->I = 0;
   p->soundtimer = 0;
   p->delaytimer = 0;
   p->drawflag = 0;
-  
-  //Clear display
+  p->sp = 0;  
+
   //Clear stack
   //Clear registers
-  //Clear memory
+  for(int i = 0; i < 16; i++) {
+    p->stack[i] = 0;
+    p->V[i] = 0;
+  }
 
-  for(int i = 0; i < (64*32); i++) gfx[i] = 1;
+  //Clear memory
+  for(int i = 0; i < RAMLENGTH; i++) mem[i] = 0;
+
+  //Clear graphics buffer
+  for(int i = 0; i < (64*32); i++) gfx[i] = 0;
   
   //Set up fontset
   for(int i = 0; i < 80; ++i) mem[i] = fontset[i];
@@ -87,8 +92,10 @@ void initialize(processor_t *p, int size) {
   //Put rom data into memory
   for(int i = 0; i < size; i++) mem[i + 0x200] = romdata[i];
 
+  //Seed the random number generator
   srand(time(NULL));
   
+  //Remove rom memory now that it has been copied
   free(romdata);
 }
 
@@ -194,7 +201,7 @@ void drawscreen() {
   for(int j = 0; j < HEIGHT; j++) {
     for(int i = 0; i < WIDTH+1; i++) {
       if (i == WIDTH) buffer[i+(j*(WIDTH+1))] = '\n';
-      else buffer[i+(j*(WIDTH+1))] = (gfx[i + (j*WIDTH)]) ? ' ' : '*';
+      else buffer[i+(j*(WIDTH+1))] = (gfx[i + (j*WIDTH)]) ? '*' : ' ';
       //printf((gfx[i + (j*WIDTH)]) ? " " : "*");
       //printf((i == WIDTH - 1) ? "\n" : "");
     }

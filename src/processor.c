@@ -3,7 +3,6 @@
 #include <time.h>
 #include <stdlib.h>
 
-//processor_t p;
 unsigned gfx[64*32];
 
 void postvisit(processor_t* p, int jump) {
@@ -17,17 +16,20 @@ void postvisit(processor_t* p, int jump) {
 
 void debugout (processor_t* p, inst_t inst) {
   printf("\nPC: 0x%04X  INST: 0x%04X\n", p->pc, inst.bits);
-  disassemble(inst);
+  disassemble(p, inst);
   printreg(p);
   printf("\nDelayTimer: %d\nSoundTimer: %d\n", p->delaytimer, p->soundtimer);
   printf("Drawflag: %s\n", (p->drawflag ? "True" : "False"));
+  printf("sp: 0x%04X\n", p->sp);
 }
 
 void cpucycle(processor_t* p) {
 
   inst = fetch(p);
 
-  debugout(p, inst);
+  //debugout(p, inst);
+
+  p->drawflag = 0;
 
   switch(inst.ntype.opcode) {
 
@@ -41,8 +43,8 @@ void cpucycle(processor_t* p) {
       return;
 
     case 0xE: //00EE: Return from subroutine
-      --sp;
-      p->pc = stack[sp];
+      --p->sp;
+      p->pc = p->stack[p->sp];
       postvisit(p,0);
       return;
     }
@@ -53,8 +55,8 @@ void cpucycle(processor_t* p) {
     return;
 
   case 0x2: //2NNN Call subroutine at NNN
-    stack[sp] = p->pc;
-    ++sp;
+    p->stack[p->sp] = p->pc;
+    ++p->sp;
     p->pc = inst.jtype.address;
     postvisit(p,1);
     return;

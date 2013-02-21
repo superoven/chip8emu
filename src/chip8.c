@@ -2,8 +2,6 @@
 #include <GL/glut.h>
 #include "chip8.h"
 
-processor_t p;
-
 void step(processor_t* p) {
   cpucycle(p);
   getchar();
@@ -25,9 +23,9 @@ int main(int argc, char *argv[]) {
 
   initialize(&p, filesize);
 
-  step(&p);
+  //step(&p);
 
-  //while (1) display(&p);
+  while (1) display(&p);
   
   /*glutInit(&argc, argv);
 

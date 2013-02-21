@@ -4,6 +4,8 @@
 #define WIDTH 64
 #define HEIGHT 32
 
+#define RAMLENGTH 4096
+
 #define MULT 10
 
 int display_width;
@@ -16,12 +18,13 @@ char* romdata;
 typedef struct
 {
   unsigned char V[16];
-  unsigned short I;
   unsigned short pc;
+  unsigned short I;
   unsigned char soundtimer;
   unsigned char delaytimer;
   unsigned char drawflag;
-
+  unsigned char sp;
+  unsigned short stack[16];
 } processor_t;
 
 //Subset of instruction type to parse nibbles
@@ -57,17 +60,13 @@ typedef union {
 inst_t inst;
 
 //RAM 4k total
-unsigned char mem[4096];
+unsigned char mem[RAMLENGTH];
 
 //Graphics memory
-extern unsigned gfx[64*32];
+extern unsigned gfx[WIDTH * HEIGHT];
 
 //Index Register
 unsigned short I;
-
-//Stack for function backtracking
-unsigned short stack[16];
-unsigned short sp;
 
 //Keypad for memory mapped I/O
 unsigned char key[16];
@@ -91,7 +90,7 @@ inst_t fetch();
 void cpucycle(processor_t* p);
 
 //Disassemble instruction
-void disassemble(inst_t a);
+void disassemble(processor_t* p, inst_t a);
 
 //Print registers for debugging
 void printreg(processor_t *p);
@@ -101,7 +100,5 @@ void display(processor_t* p);
 void drawscreen();
 void keyboardDown(unsigned char val, int x, int y);
 void keyboardUp(unsigned char val, int x, int y);
-
-//extern processor_t p;
 
 #endif
