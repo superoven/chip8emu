@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <GL/glut.h>
 #include "chip8.h"
+#include <sys/time.h>
 
 int HARNESS;
 int display_width;
@@ -8,11 +9,21 @@ int display_height;
 processor_t p;
 
 void emulationLoop() {
+  struct timeval t0, t1;
+  gettimeofday(&t0,NULL);
+
   cpucycle(&p);
   if ((&p)->drawflag) {
     glClear(GL_COLOR_BUFFER_BIT);
     drawScreen();
     (&p)->drawflag = 0;
+  }
+
+  gettimeofday(&t1,NULL);
+  long elapsed = (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
+  while(elapsed < 5000) {
+      gettimeofday(&t1,NULL);
+      elapsed = (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
   }
 }
 
