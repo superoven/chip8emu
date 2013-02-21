@@ -1,0 +1,32 @@
+#!/bin/bash
+
+make
+
+echo ""
+echo "Chip8 Individual Test Script"
+
+EXPECTED_ARGS=1
+E_BADARGS=65
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+  echo "Usage: ./rundis [testfile]"
+  exit $E_BADARGS
+fi
+
+FILENAME=$1".c8"
+HEAD=$1
+LOC="./tests/proc/"
+
+./asmbin/chasm $LOC$FILENAME $LOC$HEAD 
+
+echo ""
+echo "Expected Output:"
+echo ""
+cat $LOC$HEAD".std"
+echo ""
+echo "Output:"
+echo ""
+./chipemu $LOC$HEAD
+echo ""
+rm $LOC$HEAD

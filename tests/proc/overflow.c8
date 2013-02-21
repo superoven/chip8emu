@@ -1,0 +1,5 @@
+LD V0, #FF
+LD V2, V0
+ADD V0, #05
+LD V1, VF
+DW #F010
