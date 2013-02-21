@@ -2,6 +2,8 @@
 #include <GL/glut.h>
 #include "chip8.h"
 
+int HARNESS;
+
 void step(processor_t* p) {
   cpucycle(p);
   getchar();
@@ -15,17 +17,29 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
+  char* filename;
+  
+  if (argc == 3 && (int)argv[1][0] == '-' && (int)argv[1][1] == 'h') {
+    HARNESS = 1;
+    filename = argv[2];
+  }
+  else {
+    HARNESS = 0;
+    filename = argv[1];
+  }
+
   processor_t p;
 
-  int filesize = loadrom(argv[1], &romdata);
+  int filesize = loadrom(filename, &romdata);
   display_width = WIDTH*MULT;
   display_height = HEIGHT*MULT;
 
   initialize(&p, filesize);
 
-  if (DEBUGMODE && TESTOUT) while(1) display(&p);
-  else if (DEBUGMODE) step(&p);
-  
+  if (DEBUGMODE) step(&p);
+
+  while(1) display(&p);
+
   /*glutInit(&argc, argv);
 
   glMatrixMode (GL_PROJECTION);

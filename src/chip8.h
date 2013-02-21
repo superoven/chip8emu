@@ -5,13 +5,15 @@
 #define HEIGHT 32
 
 #define RAMLENGTH 4096
-#define DEBUGMODE 1
-#define TESTOUT 1
+
+#define DEBUGMODE 0
 
 #define MULT 10
 
 int display_width;
 int display_height;
+
+extern int HARNESS;
 
 //The rom itself
 char* romdata;

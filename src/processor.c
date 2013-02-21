@@ -3,13 +3,14 @@
 #include <time.h>
 #include <stdlib.h>
 
+int HARNESS;
 unsigned gfx[64*32];
 
 void postvisit(processor_t* p, int jump) {
   if (!jump) p->pc += 2;
   if (p->delaytimer) --p->delaytimer;
   if(p->soundtimer){
-    if(p->soundtimer == 1) printf("BEEP!\n");
+    if(p->soundtimer == 1 && !HARNESS) printf("BEEP!\n");
     --p->soundtimer;
   }
 }
@@ -27,7 +28,7 @@ void cpucycle(processor_t* p) {
 
   inst = fetch(p);
 
-  if (DEBUGMODE && !TESTOUT) debugout(p, inst);
+  if (DEBUGMODE) debugout(p, inst);
 
   p->drawflag = 0;
 
@@ -262,7 +263,7 @@ void cpucycle(processor_t* p) {
       return;
 
     case 0x10: //DEBUGGING ONLY Print the first 5 registers
-      if (!TESTOUT) return;
+      if (!HARNESS) return;
       printf("%02X", p->V[0]);
       for(int i = 1; i < 5; i++) printf(" %02X", p->V[i]);
       printf("\n");

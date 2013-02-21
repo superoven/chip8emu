@@ -27,6 +27,6 @@ cat $LOC$HEAD".std"
 echo ""
 echo "Output:"
 echo ""
-./chipemu $LOC$HEAD
+./chipemu -h $LOC$HEAD
 echo ""
 rm $LOC$HEAD

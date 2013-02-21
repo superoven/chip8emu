@@ -46,7 +46,7 @@ for f in testfiles:
 
   fout = open(outputfile, "w")
 
-  returncode = call(["./chipemu", path + head], stdout = fout)
+  returncode = call(["./chipemu", "-h", path + head], stdout = fout)
   if returncode:
     print "FAIL (return code %d)" % returncode
     failed += 1

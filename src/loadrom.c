@@ -6,6 +6,7 @@
 
 #include "chip8.h"
 
+int HARNESS;
 char* romdata;
 unsigned gfx[WIDTH * HEIGHT];
 
@@ -189,7 +190,6 @@ void keyboardUp(unsigned char val, int x, int y)
 void display(processor_t* p)
 {
   cpucycle(p);
-
   if (p->drawflag) {
     p->drawflag = 0;
     drawscreen();
@@ -197,7 +197,7 @@ void display(processor_t* p)
 }
 
 void drawscreen() {
-  if (DEBUGMODE) return;
+  if (HARNESS) return;
   char buffer[(32*64) + 32*2];
   for(int j = 0; j < HEIGHT; j++) {
     for(int i = 0; i < WIDTH+1; i++) {
