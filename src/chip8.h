@@ -8,10 +8,10 @@
 
 #define DEBUGMODE 0
 
-#define MULT 10
+#define MODIFIER 10
 
-int display_width;
-int display_height;
+extern int display_width;
+extern int display_height;
 
 extern int HARNESS;
 
@@ -104,5 +104,8 @@ void display(processor_t* p);
 void drawscreen();
 void keyboardDown(unsigned char val, int x, int y);
 void keyboardUp(unsigned char val, int x, int y);
+
+void drawScreen();
+void reshapeWindow();
 
 #endif

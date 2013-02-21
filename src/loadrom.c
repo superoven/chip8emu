@@ -9,6 +9,8 @@
 int HARNESS;
 char* romdata;
 unsigned gfx[WIDTH * HEIGHT];
+int display_width;
+int display_height;
 
 unsigned char fontset[80] =
   { 
@@ -210,4 +212,40 @@ void drawscreen() {
   //int loc = WIDTH + 1 + (HEIGHT * (WIDTH+1));
   printf("%s",buffer);
   printf("\033[2J\033[1;1H");
+}
+
+void reshapeWindow(GLsizei width, GLsizei height)
+{
+  glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(0, width, height, 0, -1, 1);
+  glMatrixMode(GL_MODELVIEW);
+  glViewport(0, 0, width, height);
+
+  display_width = width;
+  display_height = height;
+
+}
+
+void drawScreen() {
+  for (int y = 0; y < HEIGHT; y++) {
+    for (int x = 0; x < WIDTH; x++) {
+      if (gfx[x+(y*WIDTH)] == 0) {
+	glColor3f(0.0f, 0.0f, 0.0f);
+      } else {
+	glColor3f(1.0f, 1.0f, 1.0f);
+      }
+
+      glBegin(GL_QUADS);	
+
+      glVertex3f((x*MODIFIER), (y*MODIFIER), 0.0f);
+      glVertex3f((x*MODIFIER), (y*MODIFIER) + MODIFIER, 0.0f);
+      glVertex3f((x*MODIFIER) + MODIFIER, (y*MODIFIER) + MODIFIER, 0.0f);
+      glVertex3f((x*MODIFIER) + MODIFIER, (y*MODIFIER), 0.0f);
+
+      glEnd();
+    }
+  }
+  glutSwapBuffers();
 }

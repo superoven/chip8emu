@@ -3,6 +3,18 @@
 #include "chip8.h"
 
 int HARNESS;
+int display_width;
+int display_height;
+processor_t p;
+
+void emulationLoop() {
+  cpucycle(&p);
+  if ((&p)->drawflag) {
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawScreen();
+    (&p)->drawflag = 0;
+  }
+}
 
 void step(processor_t* p) {
   cpucycle(p);
@@ -28,37 +40,30 @@ int main(int argc, char *argv[]) {
     filename = argv[1];
   }
 
-  processor_t p;
-
   int filesize = loadrom(filename, &romdata);
-  display_width = WIDTH*MULT;
-  display_height = HEIGHT*MULT;
+  display_width = WIDTH*MODIFIER;
+  display_height = HEIGHT*MODIFIER;
 
   initialize(&p, filesize);
 
   if (DEBUGMODE) step(&p);
 
-  while(1) display(&p);
+  //while(1) display(&p);
+  
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 
-  /*glutInit(&argc, argv);
-
-  glMatrixMode (GL_PROJECTION);
-  glLoadIdentity ();
-  glOrtho (0, display_width, display_height, 0, 0, 1);
-  glMatrixMode (GL_MODELVIEW);
-  glDisable(GL_DEPTH_TEST);
-
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA );
-  glutInitWindowPosition(320,160);
   glutInitWindowSize(display_width, display_height);
-  glutCreateWindow("CHIP-8 Emulator");
+  glutInitWindowPosition(320, 160);
+  glutCreateWindow("Chip-8 Emulator");
 
-  glutDisplayFunc(display);
-  glutIdleFunc(display);
+  glutDisplayFunc(emulationLoop);
+  glutIdleFunc(emulationLoop);
+  glutReshapeFunc(reshapeWindow);
   glutKeyboardFunc(keyboardDown);
-  glutKeyboardUpFunc(keyboardUp); 
+  glutKeyboardUpFunc(keyboardUp);
 
-  glutMainLoop();*/
+  glutMainLoop();
 
   return 0;
 }
