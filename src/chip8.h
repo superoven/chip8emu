@@ -21,6 +21,7 @@ typedef struct
   unsigned char soundtimer;
   unsigned char delaytimer;
   unsigned char drawflag;
+
 } processor_t;
 
 //Subset of instruction type to parse nibbles
@@ -58,11 +59,11 @@ inst_t inst;
 //RAM 4k total
 unsigned char mem[4096];
 
+//Graphics memory
+extern unsigned gfx[64*32];
+
 //Index Register
 unsigned short I;
-
-//Graphics array (Resolution: 64 x 32)
-unsigned gfx[64*32];
 
 //Stack for function backtracking
 unsigned short stack[16];
@@ -87,7 +88,7 @@ void initialize(processor_t *p, int size);
 inst_t fetch();
 
 //Run a cpu cycle
-void cpucycle();
+void cpucycle(processor_t* p);
 
 //Disassemble instruction
 void disassemble(inst_t a);
@@ -96,10 +97,11 @@ void disassemble(inst_t a);
 void printreg(processor_t *p);
 
 //Glut draw function
-void display();
+void display(processor_t* p);
+void drawscreen();
 void keyboardDown(unsigned char val, int x, int y);
 void keyboardUp(unsigned char val, int x, int y);
 
-extern processor_t p;
+//extern processor_t p;
 
 #endif

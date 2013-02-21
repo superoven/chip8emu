@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <GL/glut.h>
+#include <string.h>
 
 #include "chip8.h"
 
 char* romdata;
-processor_t p;
+//processor_t p;
+unsigned gfx[64*32];
 
 unsigned char fontset[80] =
   { 
@@ -76,6 +78,8 @@ void initialize(processor_t *p, int size) {
   //Clear stack
   //Clear registers
   //Clear memory
+
+  for(int i = 0; i < (64*32); i++) gfx[i] = 1;
   
   //Set up fontset
   for(int i = 0; i < 80; ++i) mem[i] = fontset[i];
@@ -96,12 +100,21 @@ inst_t fetch(processor_t *p) {
 
 void drawPixel(int x, int y)
 {
+  glBegin(GL_LINES);
+  glVertex2f(0, 25);
+  glVertex2f(25,25);
+  glEnd();
+
+  glClearColor(0.5, 1, 1, 0);
+
+  /*
   glBegin(GL_QUADS);
+
   glVertex3f((x * MULT) + 0.0f, (y * MULT) + 0.0f, 0.0f);
   glVertex3f((x * MULT) + 0.0f, (y * MULT) + MULT, 0.0f);
   glVertex3f((x * MULT) + MULT, (y * MULT) + MULT, 0.0f);
   glVertex3f((x * MULT) + MULT, (y * MULT) + 0.0f, 0.0f);
-  glEnd();
+  glEnd();*/
 }
 
 void updateQuads()
@@ -166,21 +179,27 @@ void keyboardUp(unsigned char val, int x, int y)
   else if(val == 'v')	key[0xF] = 0;
 }
 
-void display()
+void display(processor_t* p)
 {
-  cpucycle();
+  cpucycle(p);
 
-  if(p.drawflag)
-    {
-      // Clear framebuffer
-      glClear(GL_COLOR_BUFFER_BIT);
-        
-      updateQuads();		
+  if (p->drawflag) {
+    p->drawflag = 0;
+    drawscreen();
+  }
+}
 
-      // Swap buffers!
-      glutSwapBuffers();    
-
-      // Processed frame
-      p.drawflag = 0;
+void drawscreen() {
+  char buffer[(32*64) + 32*2];
+  for(int j = 0; j < HEIGHT; j++) {
+    for(int i = 0; i < WIDTH+1; i++) {
+      if (i == WIDTH) buffer[i+(j*(WIDTH+1))] = '\n';
+      else buffer[i+(j*(WIDTH+1))] = (gfx[i + (j*WIDTH)]) ? ' ' : '*';
+      //printf((gfx[i + (j*WIDTH)]) ? " " : "*");
+      //printf((i == WIDTH - 1) ? "\n" : "");
     }
+  }
+  //int loc = WIDTH + 1 + (HEIGHT * (WIDTH+1));
+  printf("%s",buffer);
+  printf("\033[2J\033[1;1H");
 }
