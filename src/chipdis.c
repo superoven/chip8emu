@@ -44,14 +44,11 @@ void disto(const char* in, const char* out) {
     inst.bits = romin[i] << 8 | romin[i+1];
     disassemble(inst, outf);
   }
-  
   free(romin);
-  //free(outf);
 }
 
 int main(int argc, char * argv[]) {
-  if (argc < 2) usage();
-  else if (argc == 2) disto(argv[1], DEFAULT_OUT);
+  if (argc == 2) disto(argv[1], DEFAULT_OUT);
   else if (argc == 3) disto(argv[1], argv[2]);
   else usage();
   return 0;

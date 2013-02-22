@@ -112,7 +112,7 @@ void disassemble(inst_t a, FILE* fp) {
   case 0xE:
     switch(inst.itype.imm) {
       
-    case 0x93: //EX93 Skips the next instruction if the key stored in VX is pressed.
+    case 0x9E: //EX93 Skips the next instruction if the key stored in VX is pressed.
       fprintf(fp,"%s V%X\n", "SKP", inst.ntype.nib0);
       return;
 
