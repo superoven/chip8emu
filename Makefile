@@ -18,7 +18,7 @@ all: $(SOURCES) $(EXECUTABLE) $(CHASM) $(DISASSEMBLER)
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $(LINKER) $(OBJECTS) -o $@
 
-$(DISASSEMBLER): $(DISOBJECTS)
+$(DISASSEMBLER): $(DISOBJECTS) obj/loadrom.o
 	$(CC) $(CFLAGS) $(DISOBJECTS) -o $@
 
 $(CHASM): asmbin/src/chasm.cpp

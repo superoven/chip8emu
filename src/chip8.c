@@ -37,7 +37,7 @@ void step(processor_t* p) {
 int main(int argc, char *argv[]) {
 
   if (argc < 2) {
-    printf("Usage: ./chipemu [rom]\n");
+    printf("Usage: ./chipemu romfile\n");
     return 0;
   }
 
@@ -60,8 +60,8 @@ int main(int argc, char *argv[]) {
 
   if (DEBUGMODE) step(&p);
 
-  if (HARNESS) while(1) display(&p);
-  
+  if (HARNESS) while(1) run(&p);
+
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 

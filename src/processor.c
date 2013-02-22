@@ -17,7 +17,7 @@ void postvisit(processor_t* p, int jump) {
 
 void debugout (processor_t* p, inst_t inst) {
   printf("\nPC: 0x%04X  INST: 0x%04X\n", p->pc, inst.bits);
-  disassemble(p, inst);
+  disassemble(inst, stdout);
   printreg(p);
   printf("\nDelayTimer: %d\nSoundTimer: %d\n", p->delaytimer, p->soundtimer);
   printf("Drawflag: %s\n", (p->drawflag ? "True" : "False"));

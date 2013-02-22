@@ -108,39 +108,6 @@ inst_t fetch(processor_t *p) {
   return ret;
 }
 
-void drawPixel(int x, int y)
-{
-  glBegin(GL_LINES);
-  glVertex2f(0, 25);
-  glVertex2f(25,25);
-  glEnd();
-
-  glClearColor(0.5, 1, 1, 0);
-
-  /*
-  glBegin(GL_QUADS);
-
-  glVertex3f((x * MULT) + 0.0f, (y * MULT) + 0.0f, 0.0f);
-  glVertex3f((x * MULT) + 0.0f, (y * MULT) + MULT, 0.0f);
-  glVertex3f((x * MULT) + MULT, (y * MULT) + MULT, 0.0f);
-  glVertex3f((x * MULT) + MULT, (y * MULT) + 0.0f, 0.0f);
-  glEnd();*/
-}
-
-void updateQuads()
-{
-  for(int y = 0; y < 32; ++y)		
-    for(int x = 0; x < 64; ++x)
-      {
-	if(gfx[(y*64) + x] == 0) 
-	  glColor3f(0.0f,0.0f,0.0f);			
-	else 
-	  glColor3f(1.0f,1.0f,1.0f);
-
-	drawPixel(x, y);
-      }
-}
-
 void keyboardDown(unsigned char val, int x, int y)
 {
   if(val == 27) exit(0);
@@ -189,16 +156,15 @@ void keyboardUp(unsigned char val, int x, int y)
   else if(val == 'v')	key[0xF] = 0;
 }
 
-void display(processor_t* p)
-{
+void run(processor_t* p) {
   cpucycle(p);
   if (p->drawflag) {
     p->drawflag = 0;
-    drawscreen();
+    drawscreentext();
   }
 }
 
-void drawscreen() {
+void drawscreentext() {
   if (HARNESS) return;
   char buffer[(32*64) + 32*2];
   for(int j = 0; j < HEIGHT; j++) {

@@ -1,6 +1,8 @@
 #ifndef __chip8_h_
 #define __chip8_h_
 
+#include <stdio.h>
+
 #define WIDTH 64
 #define HEIGHT 32
 
@@ -94,18 +96,19 @@ inst_t fetch();
 void cpucycle(processor_t* p);
 
 //Disassemble instruction
-void disassemble(processor_t* p, inst_t a);
+void disassemble(inst_t a, FILE* fp);
 
 //Print registers for debugging
 void printreg(processor_t *p);
 
+void run(processor_t *p);
+
 //Glut draw function
-void display(processor_t* p);
-void drawscreen();
+void drawScreen();
 void keyboardDown(unsigned char val, int x, int y);
 void keyboardUp(unsigned char val, int x, int y);
 
-void drawScreen();
+void drawscreentext();
 void reshapeWindow();
 
 #endif
