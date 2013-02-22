@@ -1,0 +1,28 @@
+#!/bin/bash
+
+make 2>&1
+
+echo ""
+echo "Chip8 Disassembler Test Script"
+echo "If no output after this, the files are identical"
+
+EXPECTED_ARGS=1
+E_BADARGS=65
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+  echo "Usage: ./rundis [testfile]"
+  exit $E_BADARGS
+fi
+
+FILENAME=$1
+ASM=$1".c8"
+OUTPUT=$1".out"
+LOC="./roms/"
+
+./chipdis $LOC$FILENAME $LOC$ASM
+./asmbin/chasm $LOC$ASM $LOC$OUTPUT
+
+python tests/diffbin.py $LOC$FILENAME $LOC$OUTPUT
+
+rm -f $LOC$OUTPUT $LOC$ASM

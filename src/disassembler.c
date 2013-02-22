@@ -10,16 +10,16 @@ void disassemble(inst_t a, FILE* fp) {
   switch(inst.ntype.opcode) {
 
     case 0x0:
-    switch(inst.ntype.nib2) {
-
-    case 0x0: //00E0: Clear Screen
-      fprintf(fp,"%s\n", "CLS");
+      if (inst.bits == 0x00E0) {
+	fprintf(fp,"%s\n", "CLS");
+	return;
+      }
+      if (inst.bits == 0x00EE) {
+	fprintf(fp,"%s\n", "RET");
+	return;
+      }
+      fprintf(fp,"DW #%04X\n", inst.bits);
       return;
-
-    case 0xE: //00EE: Return from subroutine
-      fprintf(fp,"%s\n", "RET");
-      return;
-    }
 
   case 0x1: //1NNN Jump to address NNN
     fprintf(fp,"%s #%03X\n", "JP", inst.jtype.address);
@@ -77,7 +77,7 @@ void disassemble(inst_t a, FILE* fp) {
       return;
       
     case 0x6: //8XY6 Shifts VX right by one. VF is set to the value of the least significant bit of VX before the shift.
-      fprintf(fp,"%s V%X\n", "SHR", inst.ntype.nib0);
+      fprintf(fp,"%s V%X, V%X\n", "SHR", inst.ntype.nib0, inst.ntype.nib1);
       return;
 
     case 0x7: //8XY7 Sets VX to VY minus VX. VF is set to 0 when there's a borrow, and 1 when there isn't.
@@ -85,7 +85,7 @@ void disassemble(inst_t a, FILE* fp) {
       return;
 
     case 0xE: //8XYE Shifts VX left by one. VF is set to the value of the most significant bit of VX before the shift.
-      fprintf(fp,"%s V%X\n", "SHL", inst.ntype.nib0);
+      fprintf(fp,"%s V%X, V%X\n", "SHL", inst.ntype.nib0, inst.ntype.nib1);
       return;
     }
 
