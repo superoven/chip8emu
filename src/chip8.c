@@ -20,17 +20,18 @@ void emulationLoop() {
   }
 
   gettimeofday(&t1,NULL);
-  long elapsed = (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
+  /*  long elapsed = (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
   while(elapsed < 5000) {
       gettimeofday(&t1,NULL);
       elapsed = (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
-  }
+      }*/	
 }
 
 void step(processor_t* p) {
-  cpucycle(p);
-  getchar();
-  step(p);
+  while(1) {
+    cpucycle(p);
+    getchar();
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -59,7 +60,7 @@ int main(int argc, char *argv[]) {
 
   if (DEBUGMODE) step(&p);
 
-  //while(1) display(&p);
+  if (HARNESS) while(1) display(&p);
   
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
