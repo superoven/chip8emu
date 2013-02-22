@@ -32,7 +32,7 @@ obj/%.o: src/%.c src/%.h
 obj/%.o: src/%.c
 	$(CC) $(CFLAGS) $(LINKER) -c $< -o $@
 
-test: $(SOURCES) $(EXECUTABLE) $(CHASM)
+test: $(SOURCES) $(EXECUTABLE) $(CHASM) $(DISASSEMBLER)
 	python tests/runsuite.py
 
 clean:

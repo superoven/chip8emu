@@ -104,7 +104,7 @@ void initialize(processor_t *p, int size) {
 
 inst_t fetch(processor_t *p) {
   inst_t ret;
-  ret.bits = mem[p->pc] << 8 | mem[p->pc + 1];
+  ret.bits = ((mem[p->pc]&0xFF) << 8) | (mem[p->pc + 1]&0xFF);
   return ret;
 }
 
