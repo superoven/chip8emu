@@ -42,9 +42,10 @@ void disto(const char* in, const char* out) {
   inst_t inst;
   for(int i = 0; i < filesize; i += 2) {
     inst.bits = (((romin[i]&0xFF) << 8) | (romin[i+1]&0xFF));
-
-    //printf("romin[i] = %02X, romin[i+1] = %02X", romin[i]&0xFF, romin[i+1]&0xFF);
-    disassemble(inst, outf);
+    if (i == filesize-1) 
+      fprintf(outf, "DB #%02X\n", inst.bits>>8);
+    else
+      disassemble(inst, outf);
   }
   free(romin);
 }

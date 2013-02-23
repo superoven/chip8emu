@@ -38,6 +38,10 @@ void disassemble(inst_t a, FILE* fp) {
     return;
 
   case 0x5: //5XY0 Skips the next instruction if VX equals VY.
+    if (inst.ntype.nib2) {
+      fprintf(fp,"DW #%04X\n", inst.bits);
+      return;
+    }
     fprintf(fp,"%s V%X, V%X\n", "SE", inst.ntype.nib0, inst.ntype.nib1);
     return;
 
@@ -53,18 +57,34 @@ void disassemble(inst_t a, FILE* fp) {
     switch(inst.ntype.nib2) {
       
     case 0x0: //8XY0 Sets VX to the value of VY.
+      if (inst.ntype.nib2) {
+	fprintf(fp,"DW #%04X\n", inst.bits);
+	return;
+      }
       fprintf(fp,"%s V%X, V%X\n", "LD", inst.ntype.nib0, inst.ntype.nib1);
       return;
 
     case 0x1: //8XY1 Sets VX to VX or VY.
+      if (inst.ntype.nib2 != 1) {
+	fprintf(fp,"DW #%04X\n", inst.bits);
+	return;
+      }
       fprintf(fp,"%s V%X, V%X\n", "OR", inst.ntype.nib0, inst.ntype.nib1);
       return;
       
     case 0x2: //8XY2 Sets VX to VX and VY.
+      if (inst.ntype.nib2 != 2) {
+	fprintf(fp,"DW #%04X\n", inst.bits);
+	return;
+      }
       fprintf(fp,"%s V%X, V%X\n", "AND", inst.ntype.nib0, inst.ntype.nib1);
       return;
 
     case 0x3: //8XY3 Sets VX to VX xor VY.
+      if (inst.ntype.nib2 != 3) {
+	fprintf(fp,"DW #%04X\n", inst.bits);
+	return;
+      }
       fprintf(fp,"%s V%X, V%X\n", "XOR", inst.ntype.nib0, inst.ntype.nib1);
       return;
     
@@ -90,6 +110,10 @@ void disassemble(inst_t a, FILE* fp) {
     }
 
   case 0x9: //9XY0 Skips the next instruction if VX doesn't equal VY.
+    if (inst.ntype.nib2) {
+      fprintf(fp,"DW #%04X\n", inst.bits);
+      return;
+    }
     fprintf(fp,"%s V%X, V%X\n", "SNE", inst.ntype.nib0, inst.ntype.nib1);
     return;
 
