@@ -9,22 +9,18 @@ int display_height;
 processor_t p;
 
 void emulationLoop() {
-  struct timeval t0, t1;
-  gettimeofday(&t0,NULL);
-
   cpucycle(&p);
   if ((&p)->drawflag) {
     glClear(GL_COLOR_BUFFER_BIT);
     drawScreen();
     (&p)->drawflag = 0;
   }
+}
 
-  gettimeofday(&t1,NULL);
-  /*  long elapsed = (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
-  while(elapsed < 5000) {
-      gettimeofday(&t1,NULL);
-      elapsed = (t1.tv_sec-t0.tv_sec)*1000000 + t1.tv_usec-t0.tv_usec;
-      }*/	
+void decTimers(int value) {
+  if ((&p)->delaytimer) --(&p)->delaytimer;
+  if ((&p)->soundtimer) --(&p)->soundtimer;
+  glutTimerFunc (10, decTimers, 0);
 }
 
 void step(processor_t* p) {
@@ -74,6 +70,7 @@ int main(int argc, char *argv[]) {
   glutReshapeFunc(reshapeWindow);
   glutKeyboardFunc(keyboardDown);
   glutKeyboardUpFunc(keyboardUp);
+  glutTimerFunc(2, decTimers, 0);
 
   glutMainLoop();
 

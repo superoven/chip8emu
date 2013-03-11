@@ -12,6 +12,8 @@
 
 #define MODIFIER 10
 
+#define TIMERLENGTH 16666
+
 extern int display_width;
 extern int display_height;
 
@@ -110,5 +112,7 @@ void keyboardUp(unsigned char val, int x, int y);
 
 void drawscreentext();
 void reshapeWindow();
+
+void decTimers(int value);
 
 #endif
