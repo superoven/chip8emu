@@ -187,13 +187,13 @@ void cpucycle(processor_t* p) {
     switch(inst.itype.imm) {
       
     case 0x9E: //EX93 Skips the next instruction if the key stored in VX is pressed.
-      printf("Location: %d, Key: %d, X: %X SKP VX\n", ((p->pc)-0x200)/2, p->V[inst.ntype.nib0], inst.ntype.nib0);
+      //printf("Location: %d, Key: %d, X: %X SKP VX\n", ((p->pc)-0x200)/2, p->V[inst.ntype.nib0], inst.ntype.nib0);
       if (key[p->V[inst.ntype.nib0]] != 0) p->pc += 2;
       postvisit(p,0);
       return;
 
     case 0xA1: //EXA1 Skips the next instruction if the key stored in VX isn't pressed.
-      printf("Location: %d, Key: %d, X: %X SKNP VX\n", ((p->pc)-0x200)/2, p->V[inst.ntype.nib0], inst.ntype.nib0);
+      //printf("Location: %d, Key: %d, X: %X SKNP VX\n", ((p->pc)-0x200)/2, p->V[inst.ntype.nib0], inst.ntype.nib0);
       if (key[p->V[inst.ntype.nib0]] == 0) p->pc += 2;
       postvisit(p,0);
       return;
@@ -209,7 +209,7 @@ void cpucycle(processor_t* p) {
 
     case 0x0A: //FX0A A key press is awaited, and then stored in VX.
       {
-	printf("%d, LD VX, K\n", p->pc-2);
+	//printf("%d, LD VX, K\n", p->pc-2);
 	unsigned char keypress = 0x0;
 	for(int i = 0; i < 16; i++) {
 	  if(key[i]) {

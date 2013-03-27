@@ -41,6 +41,13 @@ void printreg(processor_t *p) {
   printf("I %-3s = 0x%04X\n", "", p->I);
 }
 
+void printGFXBin() {
+  for(int i = 0; i < WIDTH * HEIGHT; i++) {
+    printf(((gfx[i]) ? "1" : "0"));
+  }
+  printf("\n");
+}
+
 int loadrom(const char* romname, char** result) {
   int size;
   FILE* fp;
@@ -127,7 +134,7 @@ void keyboardDown(unsigned char val, int x, int y)
   else if(val == 'd')	key[0xA] = 1;
   else if(val == 'f')	key[0xB] = 1;
 
-  else if(val == 'z')	key[0xC] = 1;
+  else if(val == 'z')	printGFXBin();
   else if(val == 'x')	key[0xD] = 1;
   else if(val == 'c')	key[0xE] = 1;
   else if(val == 'v')	key[0xF] = 1;
