@@ -32,6 +32,10 @@ void cpucycle(processor_t* p) {
 
   p->drawflag = 0;
 
+  if (p->pc % 2 == 1) {
+    printf("NOPE, ODD INST: %X\n", p->pc);
+  }
+
   switch(inst.ntype.opcode) {
 
     case 0x0:
@@ -249,19 +253,23 @@ void cpucycle(processor_t* p) {
     case 0x33: //FX33 Stores the Binary-coded decimal representation of VX ...
       mem[p->I] = p->V[inst.ntype.nib0] / 100;
       mem[p->I+1] = (p->V[inst.ntype.nib0] / 10) % 10;
-      mem[p->I+2] = (p->V[inst.ntype.nib0] / 100) % 10;
+      mem[p->I+2] = p->V[inst.ntype.nib0] % 10;
+      printf("BIN TO DEC\nVX: %X -- %X %X %X\n", p->V[inst.ntype.nib0], mem[p->I], mem[p->I+1], mem[p->I+2]);
+      
       postvisit(p,0);
       return;
 
     case 0x55: //FX55 Stores V0 to VX in memory starting at address I.
       for(int i = 0; i < inst.ntype.nib0; i++) mem[p->I + i] = p->V[i];
       p->I += inst.ntype.nib0 + 1;
+      printf("STORE TO VX\n");
       postvisit(p,0);
       return;
 
     case 0x65: //FX65 Fills V0 to VX with values from memory starting at address I.
       for(int i = 0; i < inst.ntype.nib0; i++) p->V[i] = mem[p->I + i];
       p->I += inst.ntype.nib0 + 1;
+      printf("VX TO I\n");
       postvisit(p,0);
       return;
 

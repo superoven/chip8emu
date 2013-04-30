@@ -1,2 +1,2 @@
 value = raw_input()
-print int(value,2)
+print "%X" % int(value,2)

@@ -42,7 +42,7 @@ void printreg(processor_t *p) {
 }
 
 void printGFXBin() {
-  for(int i = 0; i < WIDTH * HEIGHT; i++) {
+  for(int i = (WIDTH*HEIGHT)-1; i >= 0; i--) {
     printf(((gfx[i]) ? "1" : "0"));
   }
   printf("\n");

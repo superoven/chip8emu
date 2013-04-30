@@ -22,11 +22,11 @@ void disassemble(inst_t a, FILE* fp) {
       return;
 
   case 0x1: //1NNN Jump to address NNN
-    fprintf(fp,"%s #%03X\n", "JP", inst.jtype.address);
+    fprintf(fp,"%s #%03X\n", "JP", inst.jtype.address >> 1);
     return;
 
   case 0x2: //2NNN Call subroutine at NNN
-    fprintf(fp,"%s #%03X\n", "CALL", inst.jtype.address);
+    fprintf(fp,"%s #%03X\n", "CALL", inst.jtype.address >> 1);
     return;
 
   case 0x3: //3XNN Skips the next instruction if VX equals NN.
@@ -118,7 +118,7 @@ void disassemble(inst_t a, FILE* fp) {
     return;
 
   case 0xA: //ANNN Sets I to the address NNN.
-    fprintf(fp,"%s I, #%03X\n", "LD", inst.jtype.address);
+    fprintf(fp,"%s I, #%03X\n", "LD", inst.jtype.address >> 1);
     return;
 
   case 0xB: //BNNN Jumps to the address NNN plus V0.
